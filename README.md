@@ -18,4 +18,4 @@ pip3 install -r requirements.txt
 
 ## Result
 
-![My Image](my_git/PcapGraphBuilder/graph.png)
+<img src="graph.png" alt="IMG" height="200"/>
