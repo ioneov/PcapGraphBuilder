@@ -13,7 +13,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from PIL import Image
 
-root = 'D:\\05\\PcapGraphBuilder\\'
+ROOT = 'D:\\05\\PcapGraphBuilder\\'
 
 
 def file_loader(filename="tshark.csv"):
@@ -27,10 +27,10 @@ def file_loader(filename="tshark.csv"):
     """
     try:
         ip_list = []
-        with open(root + filename, "r") as file:
+        with open(ROOT + filename, "r") as file:
             for line in file.readlines():
                 ip_list.append(line[0:-1].replace('"', '').split(','))
-    except BaseException:
+    except FileNotFoundError:
         print("File not found...")
     ip_list = ['-'.join(sorted(x)) for x in ip_list]
     ip_dict = {x: 0 for x in ip_list}
@@ -80,16 +80,16 @@ def draw_graph():
     plt.gcf().set_size_inches(17, 17)
     plt.axis('off')
     plt.savefig(
-        root + "images/graph-{}.png".format(datetime.today().timestamp()))
-    plt.savefig(root + "graph.png")
+        ROOT + "images/graph-{}.png".format(datetime.today().timestamp()))
+    plt.savefig(ROOT + "graph.png")
     return 0
 
 
 def shark_me(filename):
     """Translate .pcap to .сsv"""
-    tsharkCall = [f"C:\\Program Files\\Wireshark\\tshark.exe",
+    tshark_call = [f"C:\\Program Files\\Wireshark\\tshark.exe",
                   "-r",
-                  root + filename,
+                  ROOT + filename,
                   "-Tfields",
                   "-E",
                   "separator=,",
@@ -105,7 +105,7 @@ def shark_me(filename):
                   "ip.addr ne 0.0.0.0"]
     tshark_out = open("tshark.csv", "wb")
     tshark_proc = subprocess.check_call(
-        tsharkCall, stdout=tshark_out, shell=True)
+        tshark_call, stdout=tshark_out, shell=True)
     tshark_out.close()
     return 0
 
@@ -144,4 +144,4 @@ scale_image(
     input_image_path='graph.png',
     output_image_path='graph.png',
     width=12000)
-os.remove(root + "tshark.csv")
+os.remove(ROOT + "tshark.csv")
